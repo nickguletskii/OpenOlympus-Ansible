@@ -1,0 +1,10 @@
+---
+- name: Install OpenOlympus-Cerberus
+  become: true
+  become_user: openolympus
+  command: mvn install -DskipTests=true
+  args:
+      chdir: /opt/openolympus/src/OpenOlympus-Cerberus/
+      creates: /opt/openolympus/.m2/repository/org/ng200/openolympus/openolympus-cerbersus
+  tags:
+  - updateOlympus

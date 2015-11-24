@@ -1,0 +1,19 @@
+---
+- name: Check for JDK
+  command: javac -version
+  failed_when: false
+  changed_when: false
+  register: jdkInstalled
+
+- name: Install JDK
+  when: jdkInstalled.rc==2
+  become: true
+  apt: pkg=openjdk-8-jdk state=installed
+  tags:
+    - installDependencies
+
+- name: Install maven
+  become: true
+  apt: pkg=maven state=installed
+  tags:
+    - installDependencies

@@ -1,0 +1,7 @@
+---
+- name: Reload daemons
+  become: true
+  command: systemctl daemon-reload
+- name: Restart jppf node service
+  become: true
+  service: name=openolympus_jppf_node state=restarted

@@ -1,0 +1,16 @@
+---
+- name: Configure OpenOlympus web server
+  become: true
+  template: src=conf/openolympus.properties dest=/opt/openolympus/openolympus.properties owner=openolympus group=openolympus mode=0644
+  tags:
+  - configureOlympus
+  notify:
+  - Restart openolympus web service
+
+- name: Configure OpenOlympus web server JPPF connection
+  become: true
+  template: src=conf/jppfClient/jppf.properties dest=/opt/openolympus/jppf.properties owner=openolympus group=openolympus mode=0644
+  tags:
+  - configureOlympus
+  notify:
+  - Restart openolympus web service

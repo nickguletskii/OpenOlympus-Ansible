@@ -1,0 +1,69 @@
+---
+
+- name: Install OpenOlympus npm dependencies
+  become: true
+  become_user: openolympus
+  npm:
+    path=/opt/openolympus/src/OpenOlympus/
+  tags:
+    - updateOlympus
+
+- name: Install webpack
+  become: true
+  become_user: openolympus
+  npm:
+    name=webpack
+    path=/opt/openolympus/src/OpenOlympus/
+  tags:
+    - installDependencies
+
+- name: Install webpack-cli
+  become: true
+  become_user: openolympus
+  npm:
+    name=webpack-cli
+    path=/opt/openolympus/src/OpenOlympus/
+  tags:
+    - installDependencies
+
+- name: Install bower
+  become: true
+  become_user: openolympus
+  npm:
+    name=bower
+    path=/opt/openolympus/src/OpenOlympus/
+  tags:
+    - installDependencies
+
+- name: Install OpenOlympus bower dependencies
+  become: true
+  become_user: openolympus
+  environment:
+    PATH: "/opt/openolympus/src/OpenOlympus/node_modules/.bin/:{{ansible_env.PATH}}"
+  bower: path=/opt/openolympus/src/OpenOlympus/
+  tags:
+    - updateOlympus
+    - installOlympus
+
+- name: Build OpenOlympus javascript and CSS bundles
+  become: true
+  become_user: openolympus
+  environment:
+    PATH: "/opt/openolympus/src/OpenOlympus/node_modules/.bin/:{{ansible_env.PATH}}"
+  shell: >
+      webpack
+      chdir=/opt/openolympus/src/OpenOlympus/
+  tags:
+    - updateOlympus
+    - installOlympus
+
+- name: Install OpenOlympus
+  become: true
+  become_user: openolympus
+  command: mvn package -DskipTests=true
+  tags:
+    - updateOlympus
+    - installOlympus
+  args:
+      chdir: /opt/openolympus/src/OpenOlympus/
+      creates: /opt/openolympus/.m2/repository/org/ng200/openolympus/openolympus

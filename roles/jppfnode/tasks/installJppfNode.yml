@@ -1,0 +1,31 @@
+---
+- name: Download JPPF node
+  become: true
+  become_user: openolympus
+  get_url:
+    url=http://downloads.sourceforge.net/project/jppf-project/jppf-project/jppf%20{{ versions.jppf }}/JPPF-{{ versions.jppf }}-node.zip
+    dest=/opt/openolympus/tmp/jppfNode.zip
+  tags:
+    - installJppf
+
+- name: Create JPPF node directory
+  become: true
+  file:
+    state=directory
+    path=/opt/openolympus/jppfNode/
+    mode="u=rwx"
+    owner=openolympus
+    group=openolympus
+  tags:
+    - installJppf
+
+- name: Extract JPPF node
+  become: true
+  unarchive:
+    src=/opt/openolympus/tmp/jppfNode.zip
+    dest=/opt/openolympus/jppfNode/
+    owner=openolympus
+    group=openolympus
+    copy=no
+  tags:
+    - installJppf

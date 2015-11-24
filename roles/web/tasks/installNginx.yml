@@ -1,0 +1,10 @@
+---
+- name: Install nginx
+  apt: pkg=nginx state=installed
+  register: nginxinstalled
+  become: true
+  notify:
+  - Start nginx
+  tags:
+    - installDependencies
+  

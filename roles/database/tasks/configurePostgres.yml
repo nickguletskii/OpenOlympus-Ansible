@@ -1,0 +1,20 @@
+---
+- name: Create postgres user
+  become: true
+  become_user: postgres
+  postgresql_user: name={{ database.username }} password={{ database.password }}
+  tags:
+    - configureDatabase
+- name: Create postgres database
+  become: true
+  become_user: postgres
+  postgresql_db: name={{ database.name }} owner={{ database.username }} encoding='UTF-8' lc_collate='en_US.UTF-8' lc_ctype='en_US.UTF-8' template='template0'
+  tags:
+    - configureDatabase
+
+- name: Add pg_trgm to postgres database
+  become: true
+  become_user: postgres
+  postgresql_ext: name=pg_trgm db={{ database.name }}
+  tags:
+    - configureDatabase

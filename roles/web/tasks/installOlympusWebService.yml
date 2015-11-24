@@ -1,0 +1,15 @@
+---
+- name: Install OpenOlympus web service
+  become: true
+  copy: src=systemd/openolympus_web.service dest=/lib/systemd/system/openolympus_web.service
+  tags:
+  - installOlympus
+  notify:
+    - Reload daemons
+    - Restart openolympus web service
+
+- name: Enable openolympus web service
+  become: true
+  service: name=openolympus_web enabled=yes
+  tags:
+  - installOlympus

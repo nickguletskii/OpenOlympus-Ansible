@@ -1,0 +1,8 @@
+---
+- name: Configure JPPF server
+  become: true
+  template: src=conf/jppfServer/jppf-driver.properties dest=/opt/openolympus/jppfServer/JPPF-5.1-driver/config/jppf-driver.properties owner=openolympus group=openolympus mode=0644
+  notify:
+    - Restart jppf server service
+  tags:
+    - installJppf

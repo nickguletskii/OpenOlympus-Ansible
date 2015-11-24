@@ -1,0 +1,9 @@
+---
+- name: Flyway migrate
+  become_user: openolympus
+  become: true
+  command: /opt/openolympus/flyway/flyway-3.2.1/flyway migrate
+  args:
+    chdir: /opt/openolympus/flyway/flyway-3.2.1/
+  tags:
+    - configureDatabase

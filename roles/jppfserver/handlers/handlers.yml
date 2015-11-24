@@ -1,0 +1,4 @@
+---
+- name: Restart jppf server service
+  become: true
+  service: name=openolympus_jppf_server state=restarted

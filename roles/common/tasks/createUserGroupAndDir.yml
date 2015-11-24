@@ -1,0 +1,25 @@
+---
+- name: Create OpenOlympus group
+  become: true
+  group: name=openolympus
+
+- name: Create OpenOlympus user
+  become: true
+  user: name=openolympus createhome=yes home=/opt/openolympus/ shell=/sbin/nologin state=present
+
+- name: Create OpenOlympus root directory
+  become: true
+  file:
+    path=/opt/openolympus/
+    mode="u=rwx"
+    owner=openolympus
+    group=openolympus
+    state=directory
+
+- name: Create OpenOlympus directory
+  become: true
+  file: path=/opt/openolympus/{{item}} mode="u=rwx" owner=openolympus group=openolympus state=directory
+  with_items: 
+    - src/
+    - storage/
+    - tmp/

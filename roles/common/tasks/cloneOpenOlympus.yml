@@ -1,0 +1,7 @@
+---
+- name: Clone OpenOlympus
+  become: true
+  become_user: openolympus
+  git: repo=https://github.com/nickguletskii/OpenOlympus.git depth=1 refspec="+refs/heads/development" dest=/opt/openolympus/src/OpenOlympus
+  tags:
+    - updateOlympus

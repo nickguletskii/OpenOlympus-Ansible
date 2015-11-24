@@ -1,0 +1,20 @@
+---
+
+- name: Install node
+  become: true
+  apt: pkg=nodejs state=installed
+  tags:
+    - installDependencies
+
+- name: Configure node symlink
+  become: true
+  file:
+    src=/usr/bin/nodejs
+    dest=/usr/bin/node
+    state=link
+
+- name: Install npm
+  become: true
+  apt: pkg=npm state=installed
+  tags:
+    - installDependencies

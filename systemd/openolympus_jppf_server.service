@@ -1,0 +1,21 @@
+[Unit]
+Description=JPPF driver for OpenOlympus
+
+[Service]
+ExecStart=/usr/bin/java -cp config:lib/* -Xmx32m -Djppf.config=jppf-driver.properties -Dlog4j.configuration=log4j-driver.properties -Djava.util.logging.config.file=config/logging-driver.properties org.jppf.server.DriverLauncher
+WorkingDirectory=/opt/openolympus/jppfServer/JPPF-5.1-driver/
+
+User=openolympus
+
+Restart=always
+RestartSec=20s
+TimeoutStartSec=120
+TimeoutStopSec=25
+
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

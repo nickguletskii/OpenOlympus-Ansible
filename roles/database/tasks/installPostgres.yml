@@ -1,0 +1,26 @@
+---
+- name: Install postgres
+  register: postgresinstalled
+  become: true
+  apt: pkg=postgresql state=installed
+  tags:
+  - installDependencies
+
+- name: Install postgres contrib
+  register: postgrescontribinstalled
+  become: true
+  apt: pkg=postgresql-contrib state=installed
+  tags:
+    - installDependencies
+
+- name: Install python-psycopg2
+  become: true
+  apt: pkg=python-psycopg2 state=installed
+  tags:
+    - installDependencies
+
+- name: Install libpq-dev
+  become: true
+  apt: pkg=libpq-dev state=installed
+  tags:
+    - installDependencies

@@ -1,0 +1,32 @@
+---
+- name: Download Flyway
+  become: true
+  get_url:
+    url=https://bintray.com/artifact/download/business/maven/flyway-commandline-{{ versions.flyway }}-linux-x64.tar.gz
+    dest=/opt/openolympus/tmp/flyway.zip
+    owner=openolympus
+    group=openolympus
+  tags:
+  - installDependencies
+
+- name: Create Flyway directory
+  become: true
+  file:
+    path=/opt/openolympus/flyway
+    mode="u=rwx"
+    owner=openolympus
+    group=openolympus
+    state=directory
+  tags:
+    - installDependencies
+
+- name: Extract Flyway
+  become: true
+  unarchive:
+    src=/opt/openolympus/tmp/flyway.zip
+    dest=/opt/openolympus/flyway/
+    owner=openolympus
+    group=openolympus
+    copy=no
+  tags:
+    - installDependencies

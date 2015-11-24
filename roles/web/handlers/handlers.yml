@@ -1,0 +1,13 @@
+---
+- name: Restart openolympus web service
+  become: true
+  service: name=openolympus_web state=restarted
+- name: Start nginx
+  become: true
+  service: name=nginx state=started
+- name: Reload nginx
+  become: true
+  service: name=nginx state=reloaded
+- name: Clear nginx cache
+  file: path={{ nginx.cache_path }} recurse=yes state=absent
+  file: path={{ nginx.cache_path }} mode=664 owner=www-data group=www-data state=directory

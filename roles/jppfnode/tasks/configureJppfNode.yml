@@ -1,0 +1,8 @@
+---
+- name: Configure JPPF node
+  become: true
+  template: src=conf/jppfNode/jppf-node.properties dest=/opt/openolympus/jppfNode/JPPF-5.1-node/config/jppf-node.properties owner=openolympus group=openolympus mode=0644
+  notify:
+    - Restart jppf node service
+  tags:
+    - installJppf

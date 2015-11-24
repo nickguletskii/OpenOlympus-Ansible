@@ -1,0 +1,42 @@
+---
+- name: Create nginx cache directory
+  become: true
+  file: path={{ nginx.cache_path }} mode=664 owner=www-data group=www-data state=directory
+  tags:
+    - configureNginx
+
+- name: Create OpenOlympus nginx web root on server
+  become: true
+  file: path=/usr/share/nginx/www/{{nginx.data_root_name}} mode=764 owner=www-data group=www-data state=directory
+  tags:
+    - configureNginx
+  
+- name: Copy OpenOlympus nginx web root to server
+  become: true
+  copy: src=nginx/www-data/{{item}} dest=/usr/share/nginx/www/{{nginx.data_root_name}}/{{item}} mode=664 owner=www-data group=www-data
+  with_items:
+  - 502.html
+  - eula.html
+  - robots.txt
+  notify:
+  - Clear nginx cache
+  - Reload nginx
+  tags:
+    - updateOlympus
+    - configureNginx
+
+- name: Configure OpenOlympus site
+  become: true
+  template: src=nginx/site.conf dest=/etc/nginx/sites-available/ool.conf owner=www-data group=www-data mode=0644
+  tags:
+    - configureNginx
+  notify:
+  - Reload nginx
+
+- name: Enable OpenOlympus site
+  become: true
+  file: src=/etc/nginx/sites-available/ool.conf dest=/etc/nginx/sites-enabled/ool.conf state=link
+  tags:
+    - enableNginx
+  notify:
+  - Reload nginx

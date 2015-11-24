@@ -1,0 +1,44 @@
+---
+paths:
+  root: "/opt/openolympus/"
+  storage: "/opt/openolympus/storage/"
+  cache_path: "/var/cache/nginx-ool"
+
+versions:
+  flyway: 3.2.1
+  jppf: 5.1
+
+nginx:
+  cache_path: "/var/cache/nginx/"
+  server_name: "ool.nickguletskii.com"
+  enable_ssl: false
+  ssl_certificate_name_crt: "server"
+  ssl_certificate_name_key: "server"
+  data_root_name: "ool"
+
+database:
+  name: "openolympus"
+  address: "localhost"
+  username: "openolympus"
+  password: "{{ oolvault.database.password }}"
+
+backend:
+  recaptcha:
+    privateKey: "{{ oolvault.backend.recaptcha.privateKey }}"
+    publicKey: "{{ oolvault.backend.recaptcha.publicKey }}"
+
+  server:
+    port: 8080
+    address: 127.0.0.1
+  mail:
+    host: "{{ oolvault.backend.mail.host }}"
+    username: "{{ oolvault.backend.mail.username }}"
+    password: "{{ oolvault.backend.mail.password }}"
+    emailConfirmationEnabled: true
+    port: 25
+    protocol: "smtp"
+    properties.mail.transport.protocol: "smtp"
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+    default-encoding: "UTF-8"
+    test-connection: false

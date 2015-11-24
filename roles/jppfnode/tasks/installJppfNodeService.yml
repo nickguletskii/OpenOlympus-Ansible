@@ -1,0 +1,14 @@
+---
+- name: Install JPPF client service
+  become: true
+  copy: src=systemd/openolympus_jppf_node.service dest=/lib/systemd/system/openolympus_jppf_node.service
+  tags:
+    - installJppf
+  notify:
+    - Reload daemons
+    - Restart jppf node service
+- name: Enable JPPF client service
+  become: true
+  service: name=openolympus_jppf_node.service enabled=yes
+  tags:
+    - installJppf

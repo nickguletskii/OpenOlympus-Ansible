@@ -1,0 +1,65 @@
+---
+- hosts: all
+  handlers:
+  - include: roles/common/handlers/handlers.yml
+
+- hosts: database
+  vars_files:
+  - vars.yml
+  - vault.yml
+  tasks:
+  - include: roles/common/tasks/installCommon.yml
+  - include: roles/database/tasks/installPostgres.yml
+  - include: roles/database/tasks/configurePostgres.yml
+  - include: roles/common/tasks/createUserGroupAndDir.yml
+  - include: roles/database/tasks/installFlyway.yml
+  - include: roles/database/tasks/configureFlyway.yml
+  - include: roles/database/tasks/runFlyway.yml
+
+- hosts: webservers
+  vars_files:
+  - vars.yml
+  - vault.yml
+  tasks:
+  - include: roles/common/tasks/installCommon.yml
+  - include: roles/common/tasks/createUserGroupAndDir.yml
+  - include: roles/common/tasks/installNode.yml
+  - include: roles/common/tasks/installJava.yml
+  - include: roles/web/tasks/installNginx.yml
+  - include: roles/web/tasks/configureNginx.yml
+  - include: roles/common/tasks/cloneOpenOlympus.yml
+  - include: roles/common/tasks/cloneOpenOlympusCerberus.yml
+  - include: roles/common/tasks/installOpenOlympusCerberus.yml
+  - include: roles/common/tasks/installOpenOlympus.yml
+  - include: roles/web/tasks/configureOlympus.yml
+  - include: roles/web/tasks/installOlympusWebService.yml
+  handlers:
+  - include: roles/web/handlers/handlers.yml
+
+- hosts: jppfServers
+  vars_files:
+  - vars.yml
+  - vault.yml
+  tasks:
+  - include: roles/common/tasks/installCommon.yml
+  - include: roles/common/tasks/installJava.yml
+  - include: roles/common/tasks/createUserGroupAndDir.yml
+  - include: roles/jppfserver/tasks/installJppfServer.yml
+  - include: roles/jppfserver/tasks/installJppfServerService.yml
+  - include: roles/jppfserver/tasks/configureJppfServer.yml
+  handlers:
+  - include: roles/jppfserver/handlers/handlers.yml
+  
+- hosts: jppfNodes
+  vars_files:
+  - vars.yml
+  - vault.yml
+  tasks:
+  - include: roles/common/tasks/installCommon.yml
+  - include: roles/common/tasks/installJava.yml
+  - include: roles/common/tasks/createUserGroupAndDir.yml
+  - include: roles/jppfnode/tasks/installJppfNode.yml
+  - include: roles/jppfnode/tasks/installJppfNodeService.yml
+  - include: roles/jppfnode/tasks/configureJppfNode.yml
+  handlers:
+  - include: roles/jppfnode/handlers/handlers.yml
