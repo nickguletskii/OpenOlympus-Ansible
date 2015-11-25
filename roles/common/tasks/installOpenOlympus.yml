@@ -26,25 +26,6 @@
   tags:
     - installDependencies
 
-- name: Install bower
-  become: true
-  become_user: openolympus
-  npm:
-    name=bower
-    path=/opt/openolympus/src/OpenOlympus/
-  tags:
-    - installDependencies
-
-- name: Install OpenOlympus bower dependencies
-  become: true
-  become_user: openolympus
-  environment:
-    PATH: "/opt/openolympus/src/OpenOlympus/node_modules/.bin/:{{ansible_env.PATH}}"
-  bower: path=/opt/openolympus/src/OpenOlympus/
-  tags:
-    - updateOlympus
-    - installOlympus
-
 - name: Build OpenOlympus javascript and CSS bundles
   become: true
   become_user: openolympus
@@ -64,6 +45,8 @@
   tags:
     - updateOlympus
     - installOlympus
+  notify:
+    - Restart openolympus web service
   args:
       chdir: /opt/openolympus/src/OpenOlympus/
       creates: /opt/openolympus/.m2/repository/org/ng200/openolympus/openolympus
