@@ -26,11 +26,11 @@
   - include: roles/common/tasks/installNode.yml
   - include: roles/common/tasks/installJava.yml
   - include: roles/web/tasks/installNginx.yml
-  - include: roles/web/tasks/configureNginx.yml
   - include: roles/common/tasks/cloneOpenOlympus.yml
   - include: roles/common/tasks/cloneOpenOlympusCerberus.yml
   - include: roles/common/tasks/installOpenOlympusCerberus.yml
   - include: roles/common/tasks/installOpenOlympus.yml
+  - include: roles/web/tasks/configureNginx.yml
   - include: roles/web/tasks/configureOlympus.yml
   - include: roles/web/tasks/installOlympusWebService.yml
   handlers:

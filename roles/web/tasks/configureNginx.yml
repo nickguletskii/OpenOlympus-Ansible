@@ -7,17 +7,48 @@
 
 - name: Create OpenOlympus nginx web root on server
   become: true
-  file: path=/usr/share/nginx/www/{{nginx.data_root_name}} mode=764 owner=www-data group=www-data state=directory
+  file:
+    path=/usr/share/nginx/www/{{nginx.data_root_name}}
+    mode="u=rwx,g=r,o="
+    owner=www-data
+    group=www-data
+    state=directory
   tags:
     - configureNginx
   
 - name: Copy OpenOlympus nginx web root to server
   become: true
-  copy: src=nginx/www-data/{{item}} dest=/usr/share/nginx/www/{{nginx.data_root_name}}/{{item}} mode=664 owner=www-data group=www-data
+  copy:
+    src=nginx/www-data/{{item}}
+    dest=/usr/share/nginx/www/{{nginx.data_root_name}}/{{item}}
+    mode="u=rwx,g=r,o="
+    owner=www-data
+    group=www-data
   with_items:
   - 502.html
   - eula.html
   - robots.txt
+  notify:
+  - Clear nginx cache
+  - Reload nginx
+  tags:
+    - updateOlympus
+    - configureNginx
+
+- name: Create OpenOlympus nginx web resource bundle directort on server
+  become: true
+  file:
+    path=/usr/share/nginx/www/{{nginx.data_root_name}}/resources/bundled
+    mode="u=rwx,g=r,o="
+    owner=www-data
+    group=www-data
+    state=directory
+  tags:
+    - configureNginx
+
+- name: Copy OpenOlympus resources to server
+  become: true
+  command: rsync -a /opt/openolympus/src/OpenOlympus/src/main/resources/public/resources /usr/share/nginx/www/{{nginx.data_root_name}}
   notify:
   - Clear nginx cache
   - Reload nginx
@@ -35,7 +66,10 @@
 
 - name: Enable OpenOlympus site
   become: true
-  file: src=/etc/nginx/sites-available/ool.conf dest=/etc/nginx/sites-enabled/ool.conf state=link
+  file:
+    src=/etc/nginx/sites-available/ool.conf
+    dest=/etc/nginx/sites-enabled/ool.conf
+    state=link
   tags:
     - enableNginx
   notify:

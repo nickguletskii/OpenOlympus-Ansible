@@ -11,7 +11,7 @@ versions:
 nginx:
   cache_path: "/var/cache/nginx/"
   server_name: "ool.nickguletskii.com"
-  enable_ssl: false
+  enable_ssl: true
   ssl_certificate_name_crt: "server"
   ssl_certificate_name_key: "server"
   data_root_name: "ool"
