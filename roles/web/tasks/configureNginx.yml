@@ -35,7 +35,7 @@
     - updateOlympus
     - configureNginx
 
-- name: Create OpenOlympus nginx web resource bundle directort on server
+- name: Create OpenOlympus nginx web resource bundle directory on server
   become: true
   file:
     path=/usr/share/nginx/www/{{nginx.data_root_name}}/resources/bundled
@@ -46,9 +46,30 @@
   tags:
     - configureNginx
 
+- name: Create OpenOlympus nginx web partials directory on server
+  become: true
+  file:
+    path=/usr/share/nginx/www/{{nginx.data_root_name}}/partials
+    mode="u=rwx,g=r,o="
+    owner=www-data
+    group=www-data
+    state=directory
+  tags:
+    - configureNginx
+
 - name: Copy OpenOlympus resources to server
   become: true
   command: rsync -a /opt/openolympus/src/OpenOlympus/src/main/resources/public/resources /usr/share/nginx/www/{{nginx.data_root_name}}
+  notify:
+  - Clear nginx cache
+  - Reload nginx
+  tags:
+    - updateOlympus
+    - configureNginx
+
+- name: Copy OpenOlympus partials to server
+  become: true
+  command: rsync -a /opt/openolympus/src/OpenOlympus/src/main/resources/public/partials /usr/share/nginx/www/{{nginx.data_root_name}}
   notify:
   - Clear nginx cache
   - Reload nginx
